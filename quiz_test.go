@@ -1,6 +1,7 @@
 package main
 
 import (
+	"bytes"
 	"reflect"
 	"testing"
 )
@@ -32,5 +33,17 @@ func TestTally(t *testing.T) {
 
 	if !reflect.DeepEqual(got, want) {
 		t.Errorf("got %v want %v", got, want)
+	}
+}
+
+func TestQuestionDisplay(t *testing.T) {
+	problem := Problem{"1+1", "2", ""}
+	buffer := &bytes.Buffer{}
+	problem.DisplayQuestion(buffer)
+	got := buffer.String()
+	want := "1+1="
+
+	if got != want {
+		t.Errorf("got %q want %q", got, want)
 	}
 }

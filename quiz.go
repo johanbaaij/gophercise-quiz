@@ -1,5 +1,10 @@
 package main
 
+import (
+	"fmt"
+	"io"
+)
+
 type Quiz struct {
 	Problems []Problem
 }
@@ -33,10 +38,20 @@ func (p *Problem) RecordAnswer(answer string) {
 	p.UserAnswer = answer
 }
 
+func (p Problem) DisplayQuestion(out io.Writer) {
+	fmt.Fprint(out, p.Question+"=")
+}
+
 func (p Problem) Correct() bool {
 	return p.Answer == p.UserAnswer
 }
 
 func main() {
-
+	// load csv
+	// form quiz
+	// start loop quiz
+	// display question
+	// collect answer
+	// ask questions (done)
+	// display tally (done)
 }
