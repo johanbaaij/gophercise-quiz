@@ -10,6 +10,12 @@ type Quiz struct {
 	Problems []Problem
 }
 
+type Problem struct {
+	Question   string // a question
+	Answer     string // the correct answer
+	UserAnswer string // answer provided by user
+}
+
 type Tally struct {
 	Correct   int
 	Incorrect int
@@ -20,6 +26,14 @@ func (q *Quiz) Run() {
 		problem.PrintQuestion(os.Stdout)
 	}
 	fmt.Println("done")
+}
+
+func (p Problem) PrintQuestion(out io.Writer) {
+	fmt.Fprint(out, p.Question+"=\n")
+}
+
+func (p *Problem) RecordAnswer(answer string) {
+	p.UserAnswer = answer
 }
 
 func (q Quiz) Tally() Tally {
@@ -34,20 +48,6 @@ func (q Quiz) Tally() Tally {
 	}
 
 	return tally
-}
-
-type Problem struct {
-	Question   string // a question
-	Answer     string // the correct answer
-	UserAnswer string // answer provided by user
-}
-
-func (p *Problem) RecordAnswer(answer string) {
-	p.UserAnswer = answer
-}
-
-func (p Problem) PrintQuestion(out io.Writer) {
-	fmt.Fprint(out, p.Question+"=\n")
 }
 
 func (p Problem) Correct() bool {
