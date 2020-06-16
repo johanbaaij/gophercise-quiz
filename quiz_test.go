@@ -6,6 +6,18 @@ import (
 	"testing"
 )
 
+func TestPrintQuestion(t *testing.T) {
+	problem := Problem{"1+1", "2", ""}
+	buffer := &bytes.Buffer{}
+	problem.PrintQuestion(buffer)
+	got := buffer.String()
+	want := "1+1=\n"
+
+	if got != want {
+		t.Errorf("got %q want %q", got, want)
+	}
+}
+
 func TestRecordAnswer(t *testing.T) {
 	problem := Problem{"1+1", "2", ""}
 	answer := "2"
@@ -33,17 +45,5 @@ func TestTally(t *testing.T) {
 
 	if !reflect.DeepEqual(got, want) {
 		t.Errorf("got %v want %v", got, want)
-	}
-}
-
-func TestPrintQuestion(t *testing.T) {
-	problem := Problem{"1+1", "2", ""}
-	buffer := &bytes.Buffer{}
-	problem.PrintQuestion(buffer)
-	got := buffer.String()
-	want := "1+1=\n"
-
-	if got != want {
-		t.Errorf("got %q want %q", got, want)
 	}
 }
