@@ -36,12 +36,12 @@ func TestTally(t *testing.T) {
 	}
 }
 
-func TestQuestionDisplay(t *testing.T) {
+func TestPrintQuestion(t *testing.T) {
 	problem := Problem{"1+1", "2", ""}
 	buffer := &bytes.Buffer{}
-	problem.DisplayQuestion(buffer)
+	problem.PrintQuestion(buffer)
 	got := buffer.String()
-	want := "1+1="
+	want := "1+1=\n"
 
 	if got != want {
 		t.Errorf("got %q want %q", got, want)

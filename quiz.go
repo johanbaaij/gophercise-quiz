@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"io"
+	"os"
 )
 
 type Quiz struct {
@@ -12,6 +13,13 @@ type Quiz struct {
 type Tally struct {
 	Correct   int
 	Incorrect int
+}
+
+func (q *Quiz) Run() {
+	for _, problem := range q.Problems {
+		problem.PrintQuestion(os.Stdout)
+	}
+	fmt.Println("done")
 }
 
 func (q Quiz) Tally() Tally {
@@ -38,8 +46,8 @@ func (p *Problem) RecordAnswer(answer string) {
 	p.UserAnswer = answer
 }
 
-func (p Problem) DisplayQuestion(out io.Writer) {
-	fmt.Fprint(out, p.Question+"=")
+func (p Problem) PrintQuestion(out io.Writer) {
+	fmt.Fprint(out, p.Question+"=\n")
 }
 
 func (p Problem) Correct() bool {
@@ -47,11 +55,5 @@ func (p Problem) Correct() bool {
 }
 
 func main() {
-	// load csv
-	// form quiz
-	// start loop quiz
-	// display question
-	// collect answer
-	// ask questions (done)
-	// display tally (done)
+
 }
