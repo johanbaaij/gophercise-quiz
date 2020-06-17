@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"io"
 	"os"
+	"strings"
 	"time"
 )
 
@@ -104,7 +105,7 @@ func (p Problem) GetUserAnswer() Problem {
 
 // RecordAnswer stores a string in Problem.UserAnswer
 func (p *Problem) RecordAnswer(answer string) {
-	p.UserAnswer = answer
+	p.UserAnswer = strings.TrimSpace(answer)
 }
 
 // Tally calculates the number of correct/incorrect answers

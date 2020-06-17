@@ -33,14 +33,27 @@ func TestPrintQuestion(t *testing.T) {
 }
 
 func TestRecordAnswer(t *testing.T) {
-	problem := Problem{"1+1", "2", ""}
-	answer := "2"
-	problem.RecordAnswer(answer)
-	want := problem.UserAnswer
+	t.Run("test answer recording", func(t *testing.T) {
+		problem := Problem{"1+1", "2", ""}
+		answer := "2"
+		problem.RecordAnswer(answer)
+		want := problem.UserAnswer
 
-	if answer != want {
-		t.Errorf("got %v want %v", answer, want)
-	}
+		if answer != want {
+			t.Errorf("got %v want %v", answer, want)
+		}
+	})
+
+	t.Run("test answer gets trimmed", func(t *testing.T) {
+		problem := Problem{"1+1", "2", ""}
+		problem.RecordAnswer(" 2 ")
+		got := problem.UserAnswer
+		want := "2"
+
+		if got != want {
+			t.Errorf("got %v want %v", got, want)
+		}
+	})
 }
 
 func TestAnswerCorrectness(t *testing.T) {
