@@ -50,13 +50,28 @@ func TestAnswerCorrectness(t *testing.T) {
 	}
 }
 
-func TestShowResults(t *testing.T) {
+func TestResults(t *testing.T) {
 	quiz := Quiz{[]Problem{{"1+1", "2", "2"}, {"2+2", "4", "5"}}}
 
-	got := quiz.Tally()
-	want := Tally{Correct: 1, Incorrect: 1}
+	t.Run("test Tally() method", func(t *testing.T) {
+		got := quiz.Tally()
+		want := Tally{Correct: 1, Incorrect: 1}
 
-	if !reflect.DeepEqual(got, want) {
-		t.Errorf("got %v want %v", got, want)
-	}
+		if !reflect.DeepEqual(got, want) {
+			t.Errorf("got %v want %v", got, want)
+		}
+	})
+
+	t.Run("test print output", func(t *testing.T) {
+		buffer := &bytes.Buffer{}
+		quiz.PrintResults(buffer)
+		got := buffer.String()
+		want := `correct: 1
+incorrect: 1
+`
+
+		if got != want {
+			t.Errorf("got %q want %q", got, want)
+		}
+	})
 }

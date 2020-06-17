@@ -33,7 +33,7 @@ func main() {
 		quiz.Problems[i] = problem
 	}
 
-	quiz.ShowResults()
+	quiz.PrintResults(os.Stdout)
 }
 
 // Converts a CSV into a slice of Problem structs
@@ -49,10 +49,10 @@ func LoadProblems(problemsCsv io.Reader) []Problem {
 	return problems
 }
 
-func (q *Quiz) ShowResults() {
+func (q *Quiz) PrintResults(out io.Writer) {
 	tally := q.Tally()
-	fmt.Printf("correct: %d\n", tally.Correct)
-	fmt.Printf("incorrect: %d\n", tally.Incorrect)
+	fmt.Fprintf(out, "correct: %d\n", tally.Correct)
+	fmt.Fprintf(out, "incorrect: %d\n", tally.Incorrect)
 }
 
 func (p Problem) PrintQuestion(out io.Writer) {
