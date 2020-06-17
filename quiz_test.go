@@ -3,8 +3,21 @@ package main
 import (
 	"bytes"
 	"reflect"
+	"strings"
 	"testing"
 )
+
+func TestLoadProblems(t *testing.T) {
+	csv := `1+1,2
+2+2,4`
+
+	want := []Problem{{"1+1", "2", ""}, {"2+2", "4", ""}}
+	got := LoadProblems(strings.NewReader(csv))
+
+	if !reflect.DeepEqual(got, want) {
+		t.Errorf("got %v want %v", got, want)
+	}
+}
 
 func TestPrintQuestion(t *testing.T) {
 	problem := Problem{"1+1", "2", ""}
@@ -37,7 +50,7 @@ func TestAnswerCorrectness(t *testing.T) {
 	}
 }
 
-func TestTally(t *testing.T) {
+func TestShowResults(t *testing.T) {
 	quiz := Quiz{[]Problem{{"1+1", "2", "2"}, {"2+2", "4", "5"}}}
 
 	got := quiz.Tally()
