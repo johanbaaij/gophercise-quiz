@@ -5,6 +5,7 @@ import (
 	"flag"
 	"fmt"
 	"io"
+	"math/rand"
 	"os"
 	"strings"
 	"time"
@@ -40,9 +41,10 @@ func (c ConfigurableSleeper) Sleep() {
 
 func main() {
 	timeout := flag.Duration("timeout", 30*time.Second, "timeout in time.Duration format")
+	shuffle := flag.Bool("shuffle", false, "shuffles order of the quetions")
 	flag.Parse()
-	sleeper := &ConfigurableSleeper{*timeout, time.Sleep}
 
+	sleeper := &ConfigurableSleeper{*timeout, time.Sleep}
 	file, _ := os.Open("problems.csv")
 	problems := LoadProblems(file)
 	quiz := Quiz{problems}
@@ -52,13 +54,7 @@ func main() {
 	fmt.Printf("Good luck! You've got %v\n", timeout)
 
 	go QuizTimeLimit(os.Stdout, sleeper, quiz)
-
-	for i, problem := range quiz.Problems {
-		problem.PrintQuestion(os.Stdout)
-		problem := problem.GetUserAnswer()
-		quiz.Problems[i] = problem
-	}
-
+	quiz.LoopProblems(*shuffle)
 	quiz.PrintResults(os.Stdout)
 }
 
@@ -68,6 +64,20 @@ func QuizTimeLimit(out io.Writer, sleeper Sleeper, quiz Quiz) {
 	quiz.PrintResults(out)
 	fmt.Fprintln(out, "Oops! Time's up.")
 	os.Exit(0)
+}
+
+// LoopProblems prints all quiz questions and collects UserAnswers
+func (quiz Quiz) LoopProblems(shuffle bool) {
+	if shuffle {
+		rand.Seed(time.Now().UnixNano())
+		rand.Shuffle(len(quiz.Problems), func(i, j int) { quiz.Problems[i], quiz.Problems[j] = quiz.Problems[j], quiz.Problems[i] })
+	}
+
+	for i, problem := range quiz.Problems {
+		problem.PrintQuestion(os.Stdout)
+		problem := problem.GetUserAnswer()
+		quiz.Problems[i] = problem
+	}
 }
 
 // LoadProblems converts a CSV into a slice of Problem structs
@@ -111,6 +121,7 @@ func (p *Problem) RecordAnswer(answer string) {
 // Tally calculates the number of correct/incorrect answers
 func (q Quiz) Tally() Tally {
 	tally := Tally{Correct: 0, Incorrect: 0}
+
 	for _, problem := range q.Problems {
 		if problem.Correct() {
 			tally.Correct++
